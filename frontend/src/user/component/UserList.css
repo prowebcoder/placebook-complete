@@ -1,0 +1,7 @@
+ul.list-users {
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: row;
+  list-style: none;
+  gap: 20px;
+}
