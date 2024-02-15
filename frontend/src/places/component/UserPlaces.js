@@ -21,20 +21,27 @@ function UserPlaces() {
       } catch (err) {}
     };
     sendDataRequest();
-  }, [sendRequest,userID]);
+  }, [sendRequest, userID]);
 
-  const deletePlaceHandler = (deletedPlaceID) =>{
-    setLoadedPlaces(prevPlaces => prevPlaces.filter(place => place.id !== deletedPlaceID))
-  }
+  const deletePlaceHandler = (deletedPlaceID) => {
+    setLoadedPlaces((prevPlaces) =>
+      prevPlaces.filter((place) => place.id !== deletedPlaceID)
+    );
+  };
   return (
     <>
-     <ErrorModal error={error} onClear={errorHandler} />
+      <ErrorModal error={error} onClear={errorHandler} />
       {isLoading && (
         <div className="center">
           <LoadingSpinner />
         </div>
       )}
-         {!isLoading && loadedPlaces &&  <UserPlaceList items={loadedPlaces} onDeletePlace={deletePlaceHandler} />}
+      {!isLoading && loadedPlaces && (
+        <UserPlaceList
+          items={loadedPlaces}
+          onDeletePlace={deletePlaceHandler}
+        />
+      )}
     </>
   );
 }

@@ -12,6 +12,7 @@ import ErrorModal from "../../common/UIComponents/ErrorModal";
 import LoadingSpinner from "../../common/UIComponents/LoadingSpinner";
 import { AuthContext } from "../../context/log-context";
 import { useNavigate } from "react-router-dom";
+import ImageUpload from "../../common/UIComponents/ImageUpload";
 function NewPlace() {
   const auth = useContext(AuthContext);
   const { isLoading, error, sendRequest, errorHandler } = useHttpClient();
@@ -36,20 +37,17 @@ function NewPlace() {
   const history = useNavigate();
   const placeSubmitHandler = async (event) => {
     event.preventDefault();
-   console.log(auth.userId);
+    console.log(auth.userId.user._id);
+    // console.log(auth.userId.user._id);
     try {
-      await sendRequest(
-        "http://localhost:4000/api/places",
-        "POST",
-        JSON.stringify({
-          title: formState.inputs.title.value,
-          description: formState.inputs.description.value,
-          address: formState.inputs.address.value,
-          creator: auth.userId,
-        }),
-        { "Content-Type": "application/json" }
-      );
-    
+      const formData = new FormData();
+      formData.append("title", formState.inputs.title.value);
+      formData.append("description", formState.inputs.description.value);
+      formData.append("address", formState.inputs.address.value);
+      formData.append("creator", auth.userId.user._id);
+      formData.append("image", formState.inputs.image.value);
+      await sendRequest("http://localhost:4000/api/places", "POST", formData);
+
       history.push("/");
     } catch (err) {}
   };
@@ -69,7 +67,11 @@ function NewPlace() {
           initialValue={formState.inputs.title.value}
           errorText="Please enter a valid title"
         />
-
+        <ImageUpload
+          id="image"
+          onInput={inputHandler}
+          errorText="Pick the right Image type"
+        ></ImageUpload>
         <Input
           rows={20}
           id="address"

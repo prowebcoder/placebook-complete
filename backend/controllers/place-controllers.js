@@ -36,7 +36,7 @@ const getPlaceByUserID = async (req, res, next) => {
   let userplace;
   try {
     userplace = await User.findById(userID).populate("places");
-    console.log(userplace)
+    console.log(userplace);
   } catch (err) {
     const error = new Error(err.message, err.code);
     return next(error);
@@ -47,9 +47,7 @@ const getPlaceByUserID = async (req, res, next) => {
   } else {
     res.json({
       places: userplace.places.map((place) => {
-       
-       return place.toObject({ getters: true });
-        
+        return place.toObject({ getters: true });
       }),
     });
   }
@@ -66,8 +64,7 @@ const createPlace = async (req, res, next) => {
     title,
     address,
     description,
-    image:
-      "https://www.savaari.com/blog/wp-content/uploads/2023/05/Dharamshala-mountain-range-min-1-1.webp",
+    image: req.file.path,
     location: {
       lat: 28.679079,
       lng: 77.06971,
@@ -77,7 +74,6 @@ const createPlace = async (req, res, next) => {
   let user;
   try {
     user = await User.findById(creator);
-   
   } catch (err) {
     const error = new Error(err.message, err.code);
     return next(error);

@@ -15,6 +15,7 @@ import { useNavigate } from "react-router-dom";
 import ErrorModal from "../../common/UIComponents/ErrorModal";
 import LoadingSpinner from "../../common/UIComponents/LoadingSpinner";
 import { useHttpClient } from "../../common/UIComponents/http-hook";
+import ImageUpload from "../../common/UIComponents/ImageUpload";
 function Auth() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
@@ -52,15 +53,15 @@ function Auth() {
       } catch (err) {}
     } else {
       try {
+        const formData = new FormData();
+        formData.append("email", formState.inputs.email.value);
+        formData.append("name", formState.inputs.name.value);
+        formData.append("password", formState.inputs.password.value);
+        formData.append("image", formState.inputs.image.value);
         const responseData = await sendRequest(
           "http://localhost:4000/api/users/signup",
           "POST",
-          JSON.stringify({
-            email: formState.inputs.email.value,
-            name: formState.inputs.name.value,
-            password: formState.inputs.password.value,
-          }),
-          { "Content-Type": "application/json" }
+          formData
         );
         // console.log(responseData);
         auth.login(responseData);
@@ -76,6 +77,7 @@ function Auth() {
         {
           ...formState.inputs,
           name: undefined,
+          image: undefined,
         },
         formState.inputs.email.isValid && formState.inputs.password.isValid
       );
@@ -85,6 +87,10 @@ function Auth() {
           ...formState.inputs,
           name: {
             value: "",
+            isValid: false,
+          },
+          image: {
+            value: null,
             isValid: false,
           },
         },
@@ -103,15 +109,22 @@ function Auth() {
         <h2>Login Required</h2>
         <form onSubmit={authSubmitHandler}>
           {!isLoginMode && (
-            <Input
-              id="name"
-              element="input"
-              type="text"
-              label="Your Name"
-              onInput={inputHandler}
-              validators={[VALIDATOR_REQUIRE()]}
-              errorText="Please enter you name"
-            ></Input>
+            <>
+              <Input
+                id="name"
+                element="input"
+                type="text"
+                label="Your Name"
+                onInput={inputHandler}
+                validators={[VALIDATOR_REQUIRE()]}
+                errorText="Please enter you name"
+              ></Input>
+              <ImageUpload
+                id="image"
+                onInput={inputHandler}
+                errorText="Pick the right Image type"
+              ></ImageUpload>
+            </>
           )}
           <Input
             id="email"

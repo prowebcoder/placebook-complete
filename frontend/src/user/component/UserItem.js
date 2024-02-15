@@ -9,7 +9,11 @@ function UserItem(props) {
       <Card className="user-item-content">
         <Link to={`/${props.id}/${props.name}/places`}>
           <div className="user-item-image">
-            <Avatar image={props.image} alt={props.name} className="xyz" />
+            <Avatar
+              image={`http://localhost:4000/${props.image}`}
+              alt={props.name}
+              className="xyz"
+            />
           </div>
           <div className="user-item__info">
             <div className="user-item-name">Name: {props.name}</div>

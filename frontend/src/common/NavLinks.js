@@ -8,9 +8,9 @@ function NavLinks() {
       <li>
         <NavLink to="/users">All Users</NavLink>
       </li>
-      {!auth.isLoggedIn && ( <li>
+      <li>
         <NavLink to="/places">Places</NavLink>
-      </li>)}
+      </li>
       {auth.isLoggedIn && (
         <li>
           <NavLink to="places/add-place">Add Place</NavLink>
